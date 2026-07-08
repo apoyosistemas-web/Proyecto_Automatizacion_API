@@ -1,3 +1,7 @@
+# Memoria temporal de conversaciones
+conversaciones = {}
+
+
 class WebhookHandler:
 
     def __init__(self, motor):
@@ -26,7 +30,7 @@ class WebhookHandler:
         nombre = contacto.get("name")
         telefono = contacto.get("phone_number")
 
-        # Mensaje
+        # Mensaje recibido
         message_id = datos.get("id")
         mensaje = (datos.get("content") or "").strip()
 
@@ -38,13 +42,63 @@ class WebhookHandler:
         print(f"Teléfono        : {telefono}")
         print(f"Mensaje         : {mensaje}")
 
-        # Validar si el mensaje corresponde a un módulo
+        # ====================================================
+        # PASO 1: ¿El usuario escribió un módulo?
+        # ====================================================
+
         if self.motor.existe_modulo(mensaje):
 
-            print("\nMódulo encontrado.")
+            # Guardar el módulo seleccionado para esta conversación
+            conversaciones[conversation_id] = {
+                "modulo": mensaje
+            }
 
-        else:
+            menu = self.motor.construir_menu(mensaje)
 
-            print("\nEl mensaje no corresponde a ningún módulo.")
+            print()
+            print("=" * 60)
+            print("MENÚ GENERADO")
+            print("=" * 60)
+            print(menu)
+            print("=" * 60)
 
-        print("=" * 60)
+            return
+
+        # ====================================================
+        # PASO 2: ¿El usuario respondió una opción del menú?
+        # ====================================================
+
+        if conversation_id in conversaciones:
+
+            modulo = conversaciones[conversation_id]["modulo"]
+
+            caso = self.motor.buscar_opcion(modulo, mensaje)
+
+            if caso is not None:
+
+                print()
+                print("=" * 60)
+                print("CASO SELECCIONADO")
+                print("=" * 60)
+
+                print(f"Código      : {caso['Codigo']}")
+                print(f"Módulo      : {caso['Módulo']}")
+                print(f"Caso        : {caso['Caso']}")
+                print(f"Equipo      : {caso['Equipo']}")
+                print(f"Equipo ID   : {caso['Equipo_ID']}")
+                print(f"Agente      : {caso['Agente']}")
+                print(f"Agente ID   : {caso['Agente_ID']}")
+                print(f"Prioridad   : {caso['Prioridad']}")
+                print(f"Etiqueta    : {caso['Etiqueta']}")
+                print(f"Nivel       : {caso['Nivel de atención']}")
+
+                print("=" * 60)
+
+                return
+
+        # ====================================================
+        # No se encontró ni módulo ni opción válida
+        # ====================================================
+
+        print()
+        print("No se encontró el módulo ni una opción válida.")
