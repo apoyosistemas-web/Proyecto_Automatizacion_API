@@ -1,11 +1,20 @@
 from flask import Flask, request, jsonify
 
 from modules.webhook import WebhookHandler
+from modules.reader import ExcelReader
+from modules.rules import RulesEngine
 
 app = Flask(__name__)
 
-webhook = WebhookHandler()
+# Cargar Excel una sola vez
+excel = ExcelReader("data/casos.xlsx")
+casos = excel.load_cases()
 
+# Crear el motor de reglas
+motor = RulesEngine(casos)
+
+# Crear el webhook con el motor
+webhook = WebhookHandler(motor)
 
 @app.route("/", methods=["GET"])
 def inicio():
