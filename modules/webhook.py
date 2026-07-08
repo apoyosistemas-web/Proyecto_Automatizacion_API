@@ -1,6 +1,6 @@
 from modules.api_client import ApiClient
 
-# Memoria temporal
+# Memoria temporal de conversaciones
 conversaciones = {}
 
 
@@ -37,7 +37,9 @@ class WebhookHandler:
         print(f"Teléfono        : {telefono}")
         print(f"Mensaje         : {mensaje}")
 
-        # -------------------------------------------------
+        # =====================================================
+        # ¿El usuario escribió un módulo?
+        # =====================================================
 
         if self.motor.existe_modulo(mensaje):
 
@@ -48,11 +50,17 @@ class WebhookHandler:
             menu = self.motor.construir_menu(mensaje)
 
             print()
+            print("=" * 60)
+            print("MENÚ GENERADO")
+            print("=" * 60)
             print(menu)
+            print("=" * 60)
 
             return
 
-        # -------------------------------------------------
+        # =====================================================
+        # ¿El usuario respondió una opción?
+        # =====================================================
 
         if conversation_id in conversaciones:
 
@@ -73,14 +81,26 @@ class WebhookHandler:
                 print("DATOS PREPARADOS PARA CHATWOOT")
                 print("=" * 60)
 
-                for clave, valor in datos_chatwoot.items():
+                print(f"Conversation ID      : {datos_chatwoot['conversation_id']}")
+                print(f"Contact ID           : {datos_chatwoot['contact_id']}")
+                print(f"Código               : {datos_chatwoot['codigo']}")
+                print(f"Módulo               : {datos_chatwoot['modulo']}")
+                print(f"Caso                 : {datos_chatwoot['caso']}")
+                print(f"Equipo               : {datos_chatwoot['equipo']}")
+                print(f"Equipo ID            : {datos_chatwoot['equipo_id']}")
 
-                    print(f"{clave:18}: {valor}")
+                print()
+                print(f"Agentes disponibles  : {datos_chatwoot['agentes_disponibles']}")
+                print(f"Agente seleccionado  : {datos_chatwoot['agente_seleccionado']}")
+
+                print()
+                print(f"Prioridad            : {datos_chatwoot['prioridad']}")
+                print(f"Etiqueta             : {datos_chatwoot['etiqueta']}")
+                print(f"Nivel                : {datos_chatwoot['nivel']}")
 
                 print("=" * 60)
 
                 return
 
         print()
-
         print("No se encontró el módulo ni una opción válida.")
