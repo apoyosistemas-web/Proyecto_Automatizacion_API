@@ -1,0 +1,48 @@
+2026-07-09 16:55:06,581 | INFO | Proyecto iniciado
+2026-07-09 16:55:06,581 | INFO | Prueba del sistema de logs
+2026-07-09 16:55:06,582 | WARNING | Este es un mensaje de advertencia
+2026-07-09 16:55:06,582 | ERROR | Este es un mensaje de error
+2026-07-09 17:01:08,644 | INFO | Proyecto iniciado
+2026-07-09 17:01:08,644 | INFO | Prueba del sistema de logs
+2026-07-09 17:01:08,645 | WARNING | Este es un mensaje de advertencia
+2026-07-09 17:01:08,645 | ERROR | Este es un mensaje de error
+2026-07-09 17:18:04,931 | INFO | Proyecto iniciado
+2026-07-09 17:18:04,932 | INFO | Prueba del sistema de logs
+2026-07-09 17:18:04,932 | WARNING | Este es un mensaje de advertencia
+2026-07-09 17:18:04,932 | ERROR | Este es un mensaje de error
+2026-07-09 17:18:22,903 | INFO | Proyecto iniciado
+2026-07-09 17:18:22,904 | INFO | Prueba del sistema de logs
+2026-07-09 17:18:22,904 | WARNING | Este es un mensaje de advertencia
+2026-07-09 17:18:22,904 | ERROR | Este es un mensaje de error
+2026-07-09 17:18:46,502 | INFO | Webhook recibido.
+2026-07-09 17:18:46,502 | INFO | Mensaje recibido de Elsy Mariana: 9
+2026-07-09 17:18:46,507 | WARNING | No se encontró módulo u opción válida. Mensaje: 9
+2026-07-09 17:19:38,582 | INFO | Webhook recibido.
+2026-07-09 17:19:38,582 | INFO | Mensaje recibido de Elsy Mariana: 2
+2026-07-09 17:19:38,583 | WARNING | No se encontró módulo u opción válida. Mensaje: 2
+2026-07-09 17:19:57,499 | INFO | Webhook recibido.
+2026-07-09 17:19:57,499 | INFO | Mensaje recibido de Elsy Mariana: 2
+2026-07-09 17:19:57,500 | WARNING | No se encontró módulo u opción válida. Mensaje: 2
+2026-07-09 17:20:06,921 | INFO | Webhook recibido.
+2026-07-09 17:20:06,922 | INFO | Mensaje recibido de Elsy Mariana: Contabilidad
+2026-07-09 17:20:06,923 | WARNING | No se encontró módulo u opción válida. Mensaje: Contabilidad
+2026-07-09 17:22:12,088 | INFO | Webhook recibido.
+2026-07-09 17:22:12,089 | INFO | Mensaje recibido de Elsy Mariana: Liquidación
+2026-07-09 17:22:12,092 | INFO | Módulo seleccionado: Liquidación
+2026-07-09 17:22:12,095 | INFO | Menú generado para el módulo Liquidación
+2026-07-09 17:22:12,547 | ERROR | Error enviando menú. HTTP 404
+2026-07-09 17:23:16,768 | INFO | Webhook recibido.
+2026-07-09 17:23:16,769 | INFO | Mensaje recibido de Elsy Mariana: 2
+2026-07-09 17:23:16,770 | WARNING | No se encontró módulo u opción válida. Mensaje: 2
+2026-07-09 17:23:41,043 | INFO | Webhook recibido.
+2026-07-09 17:23:41,045 | INFO | Mensaje recibido de Elsy Mariana: 2
+2026-07-09 17:23:41,051 | INFO | Caso seleccionado: Rechazo Saldos
+2026-07-09 17:23:41,051 | INFO | Agente seleccionado: 1
+2026-07-09 17:23:41,051 | INFO | Prioridad asignada: high
+2026-07-09 17:23:41,404 | ERROR | Error actualizando conversación. HTTP 404
+2026-07-09 17:23:41,761 | ERROR | Error agregando etiqueta. HTTP 404
+2026-07-09 17:23:42,073 | ERROR | Error enviando mensaje de confirmación. HTTP 404
+2026-07-09 17:23:42,074 | INFO | Sesión finalizada para la conversación 45
+2026-07-09 17:24:20,542 | INFO | Webhook recibido.
+2026-07-09 17:24:20,543 | INFO | Mensaje recibido de Elsy Mariana: Contabilidad
+2026-07-09 17:24:20,544 | WARNING | No se encontró módulo u opción válida. Mensaje: Contabilidad

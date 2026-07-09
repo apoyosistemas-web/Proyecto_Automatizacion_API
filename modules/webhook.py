@@ -2,7 +2,7 @@ from modules.api_client import ApiClient
 from modules.chatwoot import Chatwoot
 from modules.messages import Messages
 from modules.session_manager import SessionManager
-
+from modules.logger import Logger
 
 
 class WebhookHandler:
@@ -13,6 +13,7 @@ class WebhookHandler:
         self.api = ApiClient()
         self.chatwoot = Chatwoot()
         self.session = SessionManager()
+        self.logger = Logger()
 
     def procesar(self, datos):
 
@@ -20,10 +21,17 @@ class WebhookHandler:
         print("WEBHOOK RECIBIDO")
         print("=" * 60)
 
+        self.logger.info("Webhook recibido.")
+
         evento = datos.get("event")
 
         if evento != "message_created":
             print(f"Evento ignorado: {evento}")
+
+            self.logger.warning(
+                f"Evento ignorado: {evento}"
+            )
+
             return
 
         conversation_id = datos.get("conversation", {}).get("id")
@@ -40,18 +48,32 @@ class WebhookHandler:
         print(f"Teléfono        : {telefono}")
         print(f"Mensaje         : {mensaje}")
 
+        self.logger.info(
+            f"Mensaje recibido de {nombre}: {mensaje}"
+        )
+
         # =====================================================
         # EL USUARIO ESCRIBIÓ UN MÓDULO
         # =====================================================
 
         if self.motor.existe_modulo(mensaje):
 
+            self.logger.info(
+                f"Módulo seleccionado: {mensaje}"
+            )
+
             self.session.guardar_modulo(
-                conversation_id, 
+                conversation_id,
                 mensaje
             )
 
-            menu = self.motor.construir_menu(mensaje)
+            menu = self.motor.construir_menu(
+                mensaje
+            )
+
+            self.logger.info(
+                f"Menú generado para el módulo {mensaje}"
+            )
 
             print()
             print("=" * 60)
@@ -74,10 +96,18 @@ class WebhookHandler:
 
                 print("✅ Menú enviado correctamente.")
 
+                self.logger.info(
+                    "Menú enviado correctamente."
+                )
+
             else:
 
                 print("❌ Error enviando el menú.")
                 print(f"HTTP Status: {respuesta['status']}")
+
+                self.logger.error(
+                    f"Error enviando menú. HTTP {respuesta['status']}"
+                )
 
                 if "response" in respuesta:
                     print(respuesta["response"].text)
@@ -99,7 +129,10 @@ class WebhookHandler:
                 conversation_id
             )
 
-            caso = self.motor.buscar_opcion(modulo, mensaje)
+            caso = self.motor.buscar_opcion(
+                modulo,
+                mensaje
+            )
 
             if caso is not None:
 
@@ -107,6 +140,18 @@ class WebhookHandler:
                     conversation_id,
                     contact_id,
                     caso
+                )
+
+                self.logger.info(
+                    f"Caso seleccionado: {datos_chatwoot['caso']}"
+                )
+
+                self.logger.info(
+                    f"Agente seleccionado: {datos_chatwoot['agente_seleccionado']}"
+                )
+
+                self.logger.info(
+                    f"Prioridad asignada: {datos_chatwoot['prioridad']}"
                 )
 
                 print()
@@ -122,7 +167,7 @@ class WebhookHandler:
                 # =====================================================
                 # ACTUALIZAR CONVERSACIÓN
                 # =====================================================
-
+                
                 print()
                 print("=" * 60)
                 print("ACTUALIZANDO CONVERSACIÓN")
@@ -139,10 +184,18 @@ class WebhookHandler:
 
                     print("✅ Conversación actualizada.")
 
+                    self.logger.info(
+                        "Conversación actualizada correctamente."
+                    )
+
                 else:
 
                     print("❌ Error actualizando conversación.")
                     print(f"HTTP Status: {resultado['status']}")
+
+                    self.logger.error(
+                        f"Error actualizando conversación. HTTP {resultado['status']}"
+                    )
 
                     if "response" in resultado:
                         print(resultado["response"].text)
@@ -165,23 +218,30 @@ class WebhookHandler:
 
                     print("✅ Etiqueta agregada.")
 
+                    self.logger.info(
+                        f"Etiqueta agregada: {datos_chatwoot['etiqueta']}"
+                    )
+
                 else:
 
                     print("❌ Error agregando etiqueta.")
                     print(f"HTTP Status: {etiqueta['status']}")
 
+                    self.logger.error(
+                        f"Error agregando etiqueta. HTTP {etiqueta['status']}"
+                    )
+
                     if "response" in etiqueta:
                         print(etiqueta["response"].text)
 
-                
                 # =====================================================
                 # MENSAJE DE CONFIRMACIÓN
                 # =====================================================
 
                 mensaje_confirmacion = Messages.confirmacion(
-                datos_chatwoot
+                    datos_chatwoot
                 )
-  
+
                 print()
                 print("=" * 60)
                 print("ENVIANDO MENSAJE DE CONFIRMACIÓN")
@@ -196,21 +256,37 @@ class WebhookHandler:
 
                     print("✅ Mensaje de confirmación enviado.")
 
+                    self.logger.info(
+                        "Mensaje de confirmación enviado correctamente."
+                    )
+
                 else:
 
                     print("❌ Error enviando mensaje de confirmación.")
                     print(f"HTTP Status: {respuesta['status']}")
 
+                    self.logger.error(
+                        f"Error enviando mensaje de confirmación. HTTP {respuesta['status']}"
+                    )
+
                     if "response" in respuesta:
                         print(respuesta["response"].text)
 
                 print("=" * 60)
-                
+
                 self.session.eliminar(
                     conversation_id
                 )
 
+                self.logger.info(
+                    f"Sesión finalizada para la conversación {conversation_id}"
+                )
+
                 return
+
+        self.logger.warning(
+            f"No se encontró módulo u opción válida. Mensaje: {mensaje}"
+        )
 
         print()
         print("No se encontró el módulo ni una opción válida.")
