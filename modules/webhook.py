@@ -1,9 +1,8 @@
 from modules.api_client import ApiClient
 from modules.chatwoot import Chatwoot
 from modules.messages import Messages
+from modules.session_manager import SessionManager
 
-# Memoria temporal de conversaciones
-conversaciones = {}
 
 
 class WebhookHandler:
@@ -13,6 +12,7 @@ class WebhookHandler:
         self.motor = motor
         self.api = ApiClient()
         self.chatwoot = Chatwoot()
+        self.session = SessionManager()
 
     def procesar(self, datos):
 
@@ -46,9 +46,10 @@ class WebhookHandler:
 
         if self.motor.existe_modulo(mensaje):
 
-            conversaciones[conversation_id] = {
-                "modulo": mensaje
-            }
+            self.session.guardar_modulo(
+                conversation_id, 
+                mensaje
+            )
 
             menu = self.motor.construir_menu(mensaje)
 
@@ -92,9 +93,11 @@ class WebhookHandler:
         # EL USUARIO ESCOGIÓ UNA OPCIÓN
         # =====================================================
 
-        if conversation_id in conversaciones:
+        if self.session.existe(conversation_id):
 
-            modulo = conversaciones[conversation_id]["modulo"]
+            modulo = self.session.obtener_modulo(
+                conversation_id
+            )
 
             caso = self.motor.buscar_opcion(modulo, mensaje)
 
@@ -202,6 +205,10 @@ class WebhookHandler:
                         print(respuesta["response"].text)
 
                 print("=" * 60)
+                
+                self.session.eliminar(
+                    conversation_id
+                )
 
                 return
 
