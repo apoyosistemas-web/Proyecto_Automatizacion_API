@@ -89,69 +89,59 @@ class WebhookHandler:
                 print("=" * 60)
 
                 # =====================================================
-                # ASIGNAR EQUIPO
+                # ACTUALIZAR CONVERSACIÓN
                 # =====================================================
 
                 print()
                 print("=" * 60)
-                print("ASIGNANDO EQUIPO EN CHATWOOT")
+                print("ACTUALIZANDO CONVERSACIÓN")
                 print("=" * 60)
 
-                try:
+                resultado = self.chatwoot.actualizar_conversacion(
+                    conversation_id=datos_chatwoot["conversation_id"],
+                    team_id=datos_chatwoot["equipo_id"],
+                    agente_id=datos_chatwoot["agente_seleccionado"],
+                    prioridad=datos_chatwoot["prioridad"]
+                )
 
-                    respuesta_equipo = self.chatwoot.asignar_equipo(
-                        conversation_id=datos_chatwoot["conversation_id"],
-                        team_id=datos_chatwoot["equipo_id"]
-                    )
+                if resultado["ok"]:
 
-                    print(f"HTTP Status : {respuesta_equipo.status_code}")
+                    print("✅ Conversación actualizada correctamente")
 
-                    if respuesta_equipo.status_code == 200:
+                else:
 
-                        print("✅ Equipo asignado correctamente.")
+                    print("❌ No fue posible actualizar la conversación")
+                    print(f"HTTP: {resultado['status']}")
 
-                        # ===============================================
-                        # ASIGNAR AGENTE
-                        # ===============================================
+                    if "response" in resultado:
+                        print(resultado["response"].text)
 
-                        print()
-                        print("=" * 60)
-                        print("ASIGNANDO AGENTE EN CHATWOOT")
-                        print("=" * 60)
+                # =====================================================
+                # AGREGAR ETIQUETA
+                # =====================================================
 
-                        respuesta_agente = self.chatwoot.asignar_agente(
-                            conversation_id=datos_chatwoot["conversation_id"],
-                            agente_id=datos_chatwoot["agente_seleccionado"]
-                        )
+                print()
+                print("=" * 60)
+                print("AGREGANDO ETIQUETA")
+                print("=" * 60)
 
-                        print(
-                            f"Agente seleccionado : "
-                            f"{datos_chatwoot['agente_seleccionado']}"
-                        )
+                etiqueta = self.chatwoot.agregar_etiqueta(
+                    conversation_id=datos_chatwoot["conversation_id"],
+                    etiqueta=datos_chatwoot["etiqueta"]
+                )
 
-                        print(
-                            f"HTTP Status         : "
-                            f"{respuesta_agente.status_code}"
-                        )
+                if etiqueta["ok"]:
 
-                        if respuesta_agente.status_code == 200:
+                    print("✅ Etiqueta agregada correctamente")
+                    print(f"Etiqueta: {datos_chatwoot['etiqueta']}")
 
-                            print("✅ Agente asignado correctamente.")
+                else:
 
-                        else:
+                    print("❌ Error agregando la etiqueta")
+                    print(f"HTTP: {etiqueta['status']}")
 
-                            print("❌ Error al asignar el agente.")
-                            print(respuesta_agente.text)
-
-                    else:
-
-                        print("❌ Error al asignar el equipo.")
-                        print(respuesta_equipo.text)
-
-                except Exception as e:
-
-                    print("❌ Error de conexión con Chatwoot.")
-                    print(e)
+                    if "response" in etiqueta:
+                        print(etiqueta["response"].text)
 
                 print("=" * 60)
 

@@ -16,9 +16,9 @@ class Chatwoot:
             "Content-Type": "application/json"
         }
 
-    # ==========================
+    # =====================================================
     # CONSULTAS
-    # ==========================
+    # =====================================================
 
     def obtener_agentes(self):
 
@@ -47,9 +47,94 @@ class Chatwoot:
             headers=self.headers
         )
 
-    # ==========================
+    # =====================================================
     # ACTUALIZAR CONVERSACIÓN
-    # ==========================
+    # =====================================================
+
+    def actualizar_conversacion(
+        self,
+        conversation_id,
+        team_id,
+        agente_id,
+        prioridad
+    ):
+
+        url = (
+            f"{CHATWOOT_URL}/api/v1/accounts/"
+            f"{CHATWOOT_ACCOUNT_ID}/conversations/{conversation_id}"
+        )
+
+        payload = {
+            "team_id": int(team_id),
+            "assignee_id": int(agente_id),
+            "priority": prioridad
+        }
+
+        try:
+
+            respuesta = requests.patch(
+                url,
+                json=payload,
+                headers=self.headers
+            )
+
+            return {
+                "ok": respuesta.status_code == 200,
+                "status": respuesta.status_code,
+                "response": respuesta
+            }
+
+        except Exception as e:
+
+            return {
+                "ok": False,
+                "status": 500,
+                "error": str(e)
+            }
+
+    # =====================================================
+    # AGREGAR ETIQUETA
+    # =====================================================
+
+    def agregar_etiqueta(self, conversation_id, etiqueta):
+
+        url = (
+            f"{CHATWOOT_URL}/api/v1/accounts/"
+            f"{CHATWOOT_ACCOUNT_ID}/conversations/{conversation_id}/labels"
+        )
+
+        payload = {
+            "labels": [
+                etiqueta
+            ]
+        }
+
+        try:
+
+            respuesta = requests.post(
+                url,
+                json=payload,
+                headers=self.headers
+            )
+
+            return {
+                "ok": respuesta.status_code in [200, 201],
+                "status": respuesta.status_code,
+                "response": respuesta
+            }
+
+        except Exception as e:
+
+            return {
+                "ok": False,
+                "status": 500,
+                "error": str(e)
+            }
+
+    # =====================================================
+    # MÉTODOS ANTERIORES
+    # (Compatibilidad)
+    # =====================================================
 
     def asignar_equipo(self, conversation_id, team_id):
 
@@ -62,14 +147,12 @@ class Chatwoot:
             "team_id": int(team_id)
         }
 
-        respuesta = requests.patch(
+        return requests.patch(
             url,
             json=payload,
             headers=self.headers
         )
 
-        return respuesta
-    
     def asignar_agente(self, conversation_id, agente_id):
 
         url = (
@@ -81,10 +164,8 @@ class Chatwoot:
             "assignee_id": int(agente_id)
         }
 
-        respuesta = requests.patch(
+        return requests.patch(
             url,
             json=payload,
             headers=self.headers
         )
-
-        return respuesta
