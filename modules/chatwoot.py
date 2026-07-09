@@ -69,3 +69,22 @@ class Chatwoot:
         )
 
         return respuesta
+    
+    def asignar_agente(self, conversation_id, agente_id):
+
+        url = (
+            f"{CHATWOOT_URL}/api/v1/accounts/"
+            f"{CHATWOOT_ACCOUNT_ID}/conversations/{conversation_id}"
+        )
+
+        payload = {
+            "assignee_id": int(agente_id)
+        }
+
+        respuesta = requests.patch(
+            url,
+            json=payload,
+            headers=self.headers
+        )
+
+        return respuesta

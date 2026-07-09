@@ -88,9 +88,9 @@ class WebhookHandler:
 
                 print("=" * 60)
 
-                # ==========================================
-                # ASIGNAR EQUIPO EN CHATWOOT
-                # ==========================================
+                # =====================================================
+                # ASIGNAR EQUIPO
+                # =====================================================
 
                 print()
                 print("=" * 60)
@@ -99,21 +99,54 @@ class WebhookHandler:
 
                 try:
 
-                    respuesta = self.chatwoot.asignar_equipo(
+                    respuesta_equipo = self.chatwoot.asignar_equipo(
                         conversation_id=datos_chatwoot["conversation_id"],
                         team_id=datos_chatwoot["equipo_id"]
                     )
 
-                    print(f"HTTP Status : {respuesta.status_code}")
+                    print(f"HTTP Status : {respuesta_equipo.status_code}")
 
-                    if respuesta.status_code == 200:
+                    if respuesta_equipo.status_code == 200:
 
                         print("✅ Equipo asignado correctamente.")
+
+                        # ===============================================
+                        # ASIGNAR AGENTE
+                        # ===============================================
+
+                        print()
+                        print("=" * 60)
+                        print("ASIGNANDO AGENTE EN CHATWOOT")
+                        print("=" * 60)
+
+                        respuesta_agente = self.chatwoot.asignar_agente(
+                            conversation_id=datos_chatwoot["conversation_id"],
+                            agente_id=datos_chatwoot["agente_seleccionado"]
+                        )
+
+                        print(
+                            f"Agente seleccionado : "
+                            f"{datos_chatwoot['agente_seleccionado']}"
+                        )
+
+                        print(
+                            f"HTTP Status         : "
+                            f"{respuesta_agente.status_code}"
+                        )
+
+                        if respuesta_agente.status_code == 200:
+
+                            print("✅ Agente asignado correctamente.")
+
+                        else:
+
+                            print("❌ Error al asignar el agente.")
+                            print(respuesta_agente.text)
 
                     else:
 
                         print("❌ Error al asignar el equipo.")
-                        print(respuesta.text)
+                        print(respuesta_equipo.text)
 
                 except Exception as e:
 
