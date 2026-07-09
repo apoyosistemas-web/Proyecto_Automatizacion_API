@@ -8,41 +8,64 @@ from config.settings import (
 
 
 class Chatwoot:
+
     def __init__(self):
-        self.base_url = f"{CHATWOOT_URL}/api/v1/accounts/{CHATWOOT_ACCOUNT_ID}"
 
         self.headers = {
             "api_access_token": CHATWOOT_API_TOKEN,
             "Content-Type": "application/json"
         }
 
-    def obtener_agentes(self):
-        url = f"{self.base_url}/agents"
+    # ==========================
+    # CONSULTAS
+    # ==========================
 
-        respuesta = requests.get(
-            url=url,
+    def obtener_agentes(self):
+
+        url = f"{CHATWOOT_URL}/api/v1/accounts/{CHATWOOT_ACCOUNT_ID}/agents"
+
+        return requests.get(
+            url,
             headers=self.headers
         )
-
-        return respuesta
 
     def obtener_equipos(self):
-        url = f"{self.base_url}/teams"
 
-        respuesta = requests.get(
-            url=url,
+        url = f"{CHATWOOT_URL}/api/v1/accounts/{CHATWOOT_ACCOUNT_ID}/teams"
+
+        return requests.get(
+            url,
             headers=self.headers
         )
-
-        return respuesta
 
     def obtener_etiquetas(self):
-        url = f"{self.base_url}/labels"
 
-        respuesta = requests.get(
-            url=url,
+        url = f"{CHATWOOT_URL}/api/v1/accounts/{CHATWOOT_ACCOUNT_ID}/labels"
+
+        return requests.get(
+            url,
+            headers=self.headers
+        )
+
+    # ==========================
+    # ACTUALIZAR CONVERSACIÓN
+    # ==========================
+
+    def asignar_equipo(self, conversation_id, team_id):
+
+        url = (
+            f"{CHATWOOT_URL}/api/v1/accounts/"
+            f"{CHATWOOT_ACCOUNT_ID}/conversations/{conversation_id}"
+        )
+
+        payload = {
+            "team_id": int(team_id)
+        }
+
+        respuesta = requests.patch(
+            url,
+            json=payload,
             headers=self.headers
         )
 
         return respuesta
-

@@ -1,4 +1,5 @@
 from modules.api_client import ApiClient
+from modules.chatwoot import Chatwoot
 
 # Memoria temporal de conversaciones
 conversaciones = {}
@@ -10,6 +11,7 @@ class WebhookHandler:
 
         self.motor = motor
         self.api = ApiClient()
+        self.chatwoot = Chatwoot()
 
     def procesar(self, datos):
 
@@ -38,7 +40,7 @@ class WebhookHandler:
         print(f"Mensaje         : {mensaje}")
 
         # =====================================================
-        # ¿El usuario escribió un módulo?
+        # EL USUARIO ESCRIBIÓ UN MÓDULO
         # =====================================================
 
         if self.motor.existe_modulo(mensaje):
@@ -59,7 +61,7 @@ class WebhookHandler:
             return
 
         # =====================================================
-        # ¿El usuario respondió una opción?
+        # EL USUARIO ESCOGIÓ UNA OPCIÓN
         # =====================================================
 
         if conversation_id in conversaciones:
@@ -78,25 +80,45 @@ class WebhookHandler:
 
                 print()
                 print("=" * 60)
-                print("DATOS PREPARADOS PARA CHATWOOT")
+                print("DATOS PREPARADOS")
                 print("=" * 60)
 
-                print(f"Conversation ID      : {datos_chatwoot['conversation_id']}")
-                print(f"Contact ID           : {datos_chatwoot['contact_id']}")
-                print(f"Código               : {datos_chatwoot['codigo']}")
-                print(f"Módulo               : {datos_chatwoot['modulo']}")
-                print(f"Caso                 : {datos_chatwoot['caso']}")
-                print(f"Equipo               : {datos_chatwoot['equipo']}")
-                print(f"Equipo ID            : {datos_chatwoot['equipo_id']}")
+                for clave, valor in datos_chatwoot.items():
+                    print(f"{clave:22}: {valor}")
+
+                print("=" * 60)
+
+                # ==========================================
+                # ASIGNAR EQUIPO EN CHATWOOT
+                # ==========================================
 
                 print()
-                print(f"Agentes disponibles  : {datos_chatwoot['agentes_disponibles']}")
-                print(f"Agente seleccionado  : {datos_chatwoot['agente_seleccionado']}")
+                print("=" * 60)
+                print("ASIGNANDO EQUIPO EN CHATWOOT")
+                print("=" * 60)
 
-                print()
-                print(f"Prioridad            : {datos_chatwoot['prioridad']}")
-                print(f"Etiqueta             : {datos_chatwoot['etiqueta']}")
-                print(f"Nivel                : {datos_chatwoot['nivel']}")
+                try:
+
+                    respuesta = self.chatwoot.asignar_equipo(
+                        conversation_id=datos_chatwoot["conversation_id"],
+                        team_id=datos_chatwoot["equipo_id"]
+                    )
+
+                    print(f"HTTP Status : {respuesta.status_code}")
+
+                    if respuesta.status_code == 200:
+
+                        print("✅ Equipo asignado correctamente.")
+
+                    else:
+
+                        print("❌ Error al asignar el equipo.")
+                        print(respuesta.text)
+
+                except Exception as e:
+
+                    print("❌ Error de conexión con Chatwoot.")
+                    print(e)
 
                 print("=" * 60)
 
