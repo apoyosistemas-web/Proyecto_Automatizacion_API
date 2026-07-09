@@ -132,8 +132,46 @@ class Chatwoot:
             }
 
     # =====================================================
-    # MÉTODOS ANTERIORES
-    # (Compatibilidad)
+    # ENVIAR MENSAJE
+    # =====================================================
+
+    def enviar_mensaje(self, conversation_id, mensaje):
+
+        url = (
+            f"{CHATWOOT_URL}/api/v1/accounts/"
+            f"{CHATWOOT_ACCOUNT_ID}/conversations/"
+            f"{conversation_id}/messages"
+        )
+
+        payload = {
+            "content": mensaje,
+            "message_type": "outgoing"
+        }
+
+        try:
+
+            respuesta = requests.post(
+                url,
+                json=payload,
+                headers=self.headers
+            )
+
+            return {
+                "ok": respuesta.status_code in [200, 201],
+                "status": respuesta.status_code,
+                "response": respuesta
+            }
+
+        except Exception as e:
+
+            return {
+                "ok": False,
+                "status": 500,
+                "error": str(e)
+            }
+
+    # =====================================================
+    # MÉTODOS TEMPORALES
     # =====================================================
 
     def asignar_equipo(self, conversation_id, team_id):

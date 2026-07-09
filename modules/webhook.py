@@ -1,5 +1,6 @@
 from modules.api_client import ApiClient
 from modules.chatwoot import Chatwoot
+from modules.messages import Messages
 
 # Memoria temporal de conversaciones
 conversaciones = {}
@@ -58,6 +59,33 @@ class WebhookHandler:
             print(menu)
             print("=" * 60)
 
+            print()
+            print("=" * 60)
+            print("ENVIANDO MENÚ A CHATWOOT")
+            print("=" * 60)
+
+            respuesta = self.chatwoot.enviar_mensaje(
+                conversation_id,
+                menu
+            )
+
+            if respuesta["ok"]:
+
+                print("✅ Menú enviado correctamente.")
+
+            else:
+
+                print("❌ Error enviando el menú.")
+                print(f"HTTP Status: {respuesta['status']}")
+
+                if "response" in respuesta:
+                    print(respuesta["response"].text)
+
+                if "error" in respuesta:
+                    print(respuesta["error"])
+
+            print("=" * 60)
+
             return
 
         # =====================================================
@@ -106,12 +134,12 @@ class WebhookHandler:
 
                 if resultado["ok"]:
 
-                    print("✅ Conversación actualizada correctamente")
+                    print("✅ Conversación actualizada.")
 
                 else:
 
-                    print("❌ No fue posible actualizar la conversación")
-                    print(f"HTTP: {resultado['status']}")
+                    print("❌ Error actualizando conversación.")
+                    print(f"HTTP Status: {resultado['status']}")
 
                     if "response" in resultado:
                         print(resultado["response"].text)
@@ -132,16 +160,46 @@ class WebhookHandler:
 
                 if etiqueta["ok"]:
 
-                    print("✅ Etiqueta agregada correctamente")
-                    print(f"Etiqueta: {datos_chatwoot['etiqueta']}")
+                    print("✅ Etiqueta agregada.")
 
                 else:
 
-                    print("❌ Error agregando la etiqueta")
-                    print(f"HTTP: {etiqueta['status']}")
+                    print("❌ Error agregando etiqueta.")
+                    print(f"HTTP Status: {etiqueta['status']}")
 
                     if "response" in etiqueta:
                         print(etiqueta["response"].text)
+
+                
+                # =====================================================
+                # MENSAJE DE CONFIRMACIÓN
+                # =====================================================
+
+                mensaje_confirmacion = Messages.confirmacion(
+                datos_chatwoot
+                )
+  
+                print()
+                print("=" * 60)
+                print("ENVIANDO MENSAJE DE CONFIRMACIÓN")
+                print("=" * 60)
+
+                respuesta = self.chatwoot.enviar_mensaje(
+                    conversation_id,
+                    mensaje_confirmacion
+                )
+
+                if respuesta["ok"]:
+
+                    print("✅ Mensaje de confirmación enviado.")
+
+                else:
+
+                    print("❌ Error enviando mensaje de confirmación.")
+                    print(f"HTTP Status: {respuesta['status']}")
+
+                    if "response" in respuesta:
+                        print(respuesta["response"].text)
 
                 print("=" * 60)
 
