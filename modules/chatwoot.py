@@ -1,3 +1,5 @@
+#Este módulo centraliza toda la comunicación con la API de Chatwoot.
+
 import requests
 
 from config.settings import (

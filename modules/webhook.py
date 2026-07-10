@@ -1,3 +1,5 @@
+#Este módulo recibe y procesa los eventos enviados por Chatwoot mediante Webhooks.
+
 from modules.api_client import ApiClient
 from modules.chatwoot import Chatwoot
 from modules.messages import Messages

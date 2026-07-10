@@ -1,3 +1,6 @@
+#Gestiona las sesiones temporales de las conversaciones
+#mientras el usuario interactúa con el bot.
+
 class SessionManager:
 
     def __init__(self):

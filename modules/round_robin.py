@@ -1,3 +1,6 @@
+#Distribuye automáticamente los casos entre los agentes
+#disponibles utilizando un algoritmo Round Robin.
+
 import json
 from pathlib import Path
 

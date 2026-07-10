@@ -1,3 +1,5 @@
+#Implementa el sistema de auditoría del proyecto.
+
 import logging
 from pathlib import Path
 

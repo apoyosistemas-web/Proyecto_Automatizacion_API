@@ -1,3 +1,5 @@
+#Centraliza todos los mensajes automáticos enviados al usuario.
+
 class Messages:
 
     @staticmethod

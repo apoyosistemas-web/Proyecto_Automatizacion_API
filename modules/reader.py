@@ -1,3 +1,6 @@
+#Se encarga de leer el archivo Excel que contiene la configuración
+#de módulos, casos y reglas de asignación.
+
 from pathlib import Path
 import pandas as pd
 

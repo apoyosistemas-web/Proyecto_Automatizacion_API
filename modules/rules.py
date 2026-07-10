@@ -1,3 +1,5 @@
+#Contiene el motor de reglas del sistema.
+
 class RulesEngine:
 
     def __init__(self, dataframe):

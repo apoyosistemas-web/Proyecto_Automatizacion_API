@@ -1,3 +1,5 @@
+#Prepara toda la información obtenida desde el Excel antes de ser enviada a Chatwoot.
+
 from modules.round_robin import RoundRobin
 
 
