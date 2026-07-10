@@ -1,3 +1,6 @@
+#Carga todas las variables de entorno necesarias para la
+#ejecución de la aplicación.
+
 from dotenv import load_dotenv
 import os
 
